@@ -1,32 +1,41 @@
+/* Author: Luigi Vincent
+Practicing with recursion and exceptions
+*/
+
 import javax.swing.JOptionPane;
 
 class FactorialDemo {
     public static void main(String[] args) {
-        int factorialNumber = 0;
+        int factorialNo = 0;
         try {
-            factorialNumber = Integer.parseInt(JOptionPane.showInputDialog(null,
-                "Which number should we compute the factorial of?"));
+            factorialNo = Integer.parseInt(
+                prompt("Which number should we compute the factorial of?")
+            );
+            notify(factorialNo + " factorial is " + recur(factorialNo) + ".", "Result");
         } catch(NumberFormatException nfe) {
-            JOptionPane.showMessageDialog(null,"Input must be an integer!",
-                "Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
+            alert("Input must be an integer!", "Error");
+        } catch(IllegalArgumentException iae) {
+            alert(iae.getMessage(), "Error");
         }
-
-        JOptionPane.showMessageDialog(null,
-                factorialNumber + " factorial is " +recur(factorialNumber) +".",
-                "Result", JOptionPane.PLAIN_MESSAGE);
     }
 
     public static int recur(int n) {
     	if (n < 0) {
-        	JOptionPane.showMessageDialog(null,"n must be >= 0 but was " + n,
-        		"Error", JOptionPane.ERROR_MESSAGE);
-
             throw new IllegalArgumentException("n must be >= 0 but was " + n);
         }
-    	if (n < 2) {
+    	if (n < 2) { // Both 0! and 1! are 1
         	return 1;
     	}
     	return recur(n - 1) * n;
+    }
+
+    public static String prompt(String message) {
+        return JOptionPane.showInputDialog(null, message);
+    }
+    public static void notify(String message, String title) {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);
+    }
+    public static void alert(String message, String title) {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE);
     }
 }
