@@ -1,0 +1,36 @@
+import javax.swing.JOptionPane;
+
+class FactorialDemo {
+    public static void main(String[] args) {
+        int factorialNumber = 0;
+        try {
+            factorialNumber = Integer.parseInt(JOptionPane.showInputDialog(null,
+                "Which number should we compute the factorial of?"));
+        } catch(NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(null,"Input must be an integer!",
+                "Error", JOptionPane.ERROR_MESSAGE);
+
+            throw new NumberFormatException("Input must be an integer.");
+        }
+
+        JOptionPane.showMessageDialog(null,
+                factorialNumber + " factorial is " +recur(factorialNumber) +".",
+                "Result", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public static int recur(int n) {
+    	int result;
+    	if (n < 0) {
+        	JOptionPane.showMessageDialog(null,"n must be >= 0 but was " + n,
+        		"Error", JOptionPane.ERROR_MESSAGE);
+
+            throw new IllegalArgumentException("n must be >= 0 but was " + n);
+        }
+    	if (n < 2) {
+        	return 1;
+    	}
+
+    	result = recur(n - 1) * n;
+    	return result;
+    }
+}
