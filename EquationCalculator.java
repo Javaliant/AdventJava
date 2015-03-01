@@ -1,11 +1,13 @@
 /* Author: Luigi Vincent
-Simple Calculator done with Lambdas
+Simple operations with lambdas
 */
 
 import java.awt.GridLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -18,11 +20,11 @@ public class EquationCalculator {
 	}
 
 	static enum Operation {
-               SUM((x, y) -> x + y),
+        SUM((x, y) -> x + y),
     	DIFFERENCE((x, y) -> x - y),
-           PRODUCT((x, y) -> x * y),
-          QUOTIENT((x, y) -> x / y),
-                EXPONENT(Math::pow);
+        PRODUCT((x, y) -> x * y),
+        QUOTIENT((x, y) -> x / y),
+        EXPONENT(Math::pow);
 
     private final Equation equation;
 
@@ -60,31 +62,33 @@ public class EquationCalculator {
 
 	public EquationCalculator() {
 		JFrame frame = new JFrame("Basic Operations");
-		JPanel panel = new JPanel(new GridLayout(1, 3));
+		frame.setLayout(new BorderLayout());
+		JPanel panel = new JPanel(new GridLayout(1, 5));
 		JTextField first = new JTextField("2");
 		JTextField second = new JTextField("3");
 		JComboBox<Operation> calculate = new JComboBox<>();
+		JLabel result = new JLabel("Outcome");
 
-		calculate.addItem(Operation.SUM);
-		calculate.addItem(Operation.DIFFERENCE);
-		calculate.addItem(Operation.PRODUCT);
-		calculate.addItem(Operation.QUOTIENT);
-		calculate.addItem(Operation.EXPONENT);
-		calculate.addActionListener(
-			e -> JOptionPane.showMessageDialog(
-				null, "The result is " +
-				calculate(
+		for (Operation o : Operation.values()) {
+			calculate.addItem(o);
+		}
+
+		JButton operate = new JButton("Result");
+		operate.addActionListener(
+			e -> result.setText(
+				String.valueOf(calculate(
 					((Operation)calculate.getSelectedItem()).getEquation(),
 					Double.parseDouble(first.getText()),
 					Double.parseDouble(second.getText())
-				), 
-				"Result", JOptionPane.INFORMATION_MESSAGE
-			)
+				)
+			))
 		);
 
 		panel.add(first);
 		panel.add(second);
 		panel.add(calculate);
+		panel.add(operate);
+		panel.add(result);
 
 		frame.add(panel);
 		frame.pack();
