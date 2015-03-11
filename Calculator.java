@@ -34,10 +34,12 @@ public class Calculator {
 		JFrame frame = new JFrame("Simple Operation Calculator");
 		JPanel panel = new JPanel(new GridLayout(1, 5));
 
-		JTextField alpha = new JTextField("");
-		alpha.setToolTipText("Write the first number here.");
-		JTextField beta = new JTextField("");
-		beta.setToolTipText("Write the second number here.");
+
+		JTextField[] input = new JTextField[2];
+		for (int i = 0; i < input.length; i++) {
+			input[i] = new JTextField("");
+			input[i].setToolTipText("input operand here");
+		}
 
 		JLabel result = new JLabel("Result will be here");
 		result.setToolTipText("Click calculate to compute result");
@@ -50,18 +52,18 @@ public class Calculator {
 		JButton calculate = new JButton("Calculate");
 		calculate.addActionListener(
 			e -> result.setText(
-				calculate(
-					((Operation)operation.getSelectedItem()).getEquation(),
-					Double.parseDouble(alpha.getText()),
-					Double.parseDouble(beta.getText())
+				calculateResult(
+					(Operation)(operation.getSelectedItem()),
+					input[0].getText(),
+					input[1].getText()
 				)
 			)
 		);
 
-		panel.add(alpha);
-		panel.add(beta);
-		panel.add(operation);
+		panel.add(input[0]);
+		panel.add(input[1]);
 		panel.add(calculate);
+		panel.add(operation);
 		panel.add(result);
 
 		frame.add(panel);
@@ -71,12 +73,20 @@ public class Calculator {
 		frame.setVisible(true);
 	}
 
-	private static String calculate(Equation operation, double val1, double val2) {
-		double result = operation.compute(val1, val2);
+	private static String calculateResult(Operation op, String val1, String val2) {
+    	double alpha;
+    	double beta;
 
-		return result == (int)result ? 
-			String.valueOf((int)result) :
-			String.format("%.2f", result)
-		;
-	}
+    	try {
+    		alpha = Double.parseDouble(val1);
+    		beta = Double.parseDouble(val2);
+    	} catch(NumberFormatException nfe) {
+    		return "Invalid input";
+    	}
+
+    	double result = op.compute(alpha, beta);
+
+    	return result == (int)result ?
+    		Integer.toString((int)result) : String.format("%.2f", result);
+    }
 }
