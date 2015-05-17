@@ -1,0 +1,28 @@
+/* Author: Luigi Vincent
+Practicing Java 8 streams
+*/
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class StreamTest {
+	public static void main(String[] args) {
+		Random random = new Random();
+		List<Integer> test = new ArrayList<>();
+
+		// Adding 10 integers between 25 and 50
+		for (int i = 1; i <= 10; i++) {
+			test.add(random.nextInt(26) + 25);
+		}
+
+		System.out.println(test);
+
+		// 
+		test.stream()
+			.filter(val -> (val & 1) == 0) // filtering evens
+			.sorted()	// sorting
+			.map(decimal -> Integer.toBinaryString(decimal)) // converting to binary
+			.forEach(val -> System.out.println(val));
+	}
+}
